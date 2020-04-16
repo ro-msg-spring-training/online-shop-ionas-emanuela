@@ -4,22 +4,26 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@Getter
-@Setter
+@Data
 @Table(name = "supplier")
 @Entity
-public class Supplier {
+public class Supplier implements IColumn{
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 100)
     String name;
+
+    @OneToMany(mappedBy = "supplier")
+    List<Product> productList = new ArrayList<>();
 }
