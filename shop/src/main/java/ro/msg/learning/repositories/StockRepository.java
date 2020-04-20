@@ -10,10 +10,6 @@ import ro.msg.learning.entities.StockKey;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, StockKey> {
 
-    Stock findByLocation(Location location);
-
-    Stock findByProduct(Product product);
-
-    Stock findByProductAndLocation(Product product, Location location);
+    void deleteAllByProduct(Product product);
 
 }

@@ -10,9 +10,5 @@ import ro.msg.learning.entities.Product;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailKey> {
 
-    OrderDetail findByProduct(Product product);
-
-    OrderDetail findByOrder(Order order);
-
-    OrderDetail findByOrderAndProduct(Order order, Product product);
+    void deleteAllByProduct(Product product);
 }

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `orderDetail` (
+CREATE TABLE IF NOT EXISTS `order_detail` (
 
     `order` int NOT NULL ,
     `product` int NOT NULL ,

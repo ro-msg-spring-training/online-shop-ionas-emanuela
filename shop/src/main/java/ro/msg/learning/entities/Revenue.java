@@ -12,7 +12,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "revenue")
+@Table(name = "revenue", schema = "shop_schema")
 @Entity
 public class Revenue implements IColumn{
 
@@ -28,7 +28,6 @@ public class Revenue implements IColumn{
     BigDecimal sum;
 
     @ManyToOne
-    @MapsId("id")
     @JoinColumn(name = "location")
     Location location;
 

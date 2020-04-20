@@ -7,4 +7,6 @@ import ro.msg.learning.entities.ProductCategory;
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer> {
 
+    ProductCategory findByName(String name);
+
 }

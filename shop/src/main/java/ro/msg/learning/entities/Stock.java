@@ -11,7 +11,7 @@ import javax.persistence.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "stock")
+@Table(name = "stock", schema = "shop_schema")
 @Entity
 public class Stock implements IColumn{
 

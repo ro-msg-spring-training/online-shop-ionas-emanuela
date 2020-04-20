@@ -11,7 +11,7 @@ import javax.persistence.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "orderDetail")
+@Table(name = "order_detail", schema = "shop_schema")
 @Entity
 public class OrderDetail implements IColumn{
 

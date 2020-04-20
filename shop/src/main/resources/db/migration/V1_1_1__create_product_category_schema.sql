@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `productCategory` (
+CREATE TABLE IF NOT EXISTS `product_category` (
 
     `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` varchar(100),

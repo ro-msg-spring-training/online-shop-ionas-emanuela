@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `product` (
     `supplier` int,
     `image_url` varchar(300),
     CONSTRAINT `category_fk` FOREIGN KEY (`category`)
-        REFERENCES `productCategory`(`id`),
+        REFERENCES `product_category`(`id`),
 
     CONSTRAINT `supplier_fk` FOREIGN KEY (`supplier`)
         REFERENCES `supplier`(`id`)

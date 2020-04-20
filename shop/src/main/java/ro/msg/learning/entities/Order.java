@@ -13,7 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "order")
+@Table(name = "order", schema = "shop_schema")
 @Entity
 public class Order implements IColumn{
 
@@ -29,12 +29,10 @@ public class Order implements IColumn{
     Address address;
 
     @ManyToOne
-    @MapsId("id")
     @JoinColumn(name = "shipped_from")
     Location shippedFrom;
 
     @ManyToOne
-    @MapsId("id")
     @JoinColumn(name = "customer")
     Customer customer;
 

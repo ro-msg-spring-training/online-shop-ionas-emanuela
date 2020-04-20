@@ -13,13 +13,13 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "productCategory")
+@Table(name = "product_category", schema = "shop_schema")
 @Entity
 public class ProductCategory implements IColumn{
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @Column(name = "name", length = 100)
@@ -28,7 +28,12 @@ public class ProductCategory implements IColumn{
     @Column(name = "description", length = 300)
     String description;
 
-    @OneToMany(mappedBy = "productCategory")
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     List<Product> productList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return name + ": " + description;
+    }
 
 }

@@ -13,13 +13,13 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "product")
+@Table(name = "product", schema = "shop_schema")
 @Entity
 public class Product implements IColumn{
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @Column(name = "name", length = 100)
@@ -35,19 +35,23 @@ public class Product implements IColumn{
     Double weight;
 
     @ManyToOne
-    @MapsId("id")
     @JoinColumn(name = "category")
-    ProductCategory productCategory;
+    ProductCategory category;
 
     @ManyToOne
-    @MapsId("id")
     @JoinColumn(name = "supplier")
     Supplier supplier;
 
     @Column(name = "image_url", length = 300)
     String imageUrl;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     List<Stock> stockList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "name: " + name + " description: " + description +
+                " price: " + price + " weight: " + weight;
+    }
 
 }

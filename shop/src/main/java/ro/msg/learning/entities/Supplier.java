@@ -12,7 +12,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "supplier")
+@Table(name = "supplier", schema = "shop_schema")
 @Entity
 public class Supplier implements IColumn{
 
@@ -24,6 +24,6 @@ public class Supplier implements IColumn{
     @Column(name = "name", length = 100)
     String name;
 
-    @OneToMany(mappedBy = "supplier")
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     List<Product> productList = new ArrayList<>();
 }
