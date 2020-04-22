@@ -13,7 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
-@Table(name = "order", schema = "shop_schema")
+@Table(name = "orders", schema = "shop_schema")
 @Entity
 public class Order implements IColumn{
 
