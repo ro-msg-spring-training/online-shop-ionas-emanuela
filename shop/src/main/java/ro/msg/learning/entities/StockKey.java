@@ -18,9 +18,9 @@ import java.io.Serializable;
 public class StockKey implements Serializable {
 
     @Column(name = "product")
-    int productId;
+    Integer productId;
 
     @Column(name = "location")
-    int locationId;
+    Integer locationId;
 
 }

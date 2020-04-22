@@ -20,16 +20,13 @@ public class ProductCategory implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Integer id;
 
     @Column(name = "name", length = 100)
     String name;
 
     @Column(name = "description", length = 300)
     String description;
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    List<Product> productList = new ArrayList<>();
 
     @Override
     public String toString() {

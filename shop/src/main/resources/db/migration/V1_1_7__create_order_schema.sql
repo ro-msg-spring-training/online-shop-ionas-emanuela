@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `order` (
+CREATE TABLE IF NOT EXISTS `orders` (
 
     `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `shipped_from` int,

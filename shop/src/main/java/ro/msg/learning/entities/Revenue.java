@@ -19,7 +19,7 @@ public class Revenue implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
 
     @Column(name = "date")
     Date date;

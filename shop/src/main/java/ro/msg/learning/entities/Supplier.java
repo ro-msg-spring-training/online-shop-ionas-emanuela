@@ -19,11 +19,11 @@ public class Supplier implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
 
     @Column(name = "name", length = 100)
     String name;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
-    List<Product> productList = new ArrayList<>();
+    //@OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
+    //List<Product> productList = new ArrayList<>();
 }

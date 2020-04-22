@@ -20,7 +20,7 @@ public class Order implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
 
     @Column(name = "created_at")
     Date createdAt;

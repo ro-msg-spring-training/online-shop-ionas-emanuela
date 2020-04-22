@@ -20,7 +20,7 @@ public class Customer implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
 
     @Column(name = "first_name", length = 100)
     String firstName;

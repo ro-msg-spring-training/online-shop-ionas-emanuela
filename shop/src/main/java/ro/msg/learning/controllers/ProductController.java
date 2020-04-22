@@ -4,12 +4,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.dtos.ProductDTO;
 import ro.msg.learning.services.ProductService;
-import ro.msg.learning.services.utils.ProductNotFoundException;
-import ro.msg.learning.services.utils.ProductResourceAssembler;
+import ro.msg.learning.controllers.utils.ProductNotFoundException;
+import ro.msg.learning.controllers.utils.ProductResourceAssembler;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +64,12 @@ public class ProductController {
         return productResourceAssembler.toModel(productDTO);
     }
 
+    @Transactional
     @DeleteMapping("/products/{id}")
     public void deleteProduct(@PathVariable int id) {
         ProductDTO productDTO = productService.findById(id);
-        productService.delete(productDTO);
+
+        productService.delete(id);
     }
 
 }

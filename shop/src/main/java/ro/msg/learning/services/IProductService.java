@@ -11,7 +11,7 @@ public interface IProductService {
     ProductDTO create();
     ProductDTO save(ProductDTO productDTO);
     ProductDTO update(ProductDTO oldProductDTO, ProductDTO newProductDTO);
-    void delete(ProductDTO productDTO);
+    void delete(int id);
     List<ProductDTO> findAll();
 
 }

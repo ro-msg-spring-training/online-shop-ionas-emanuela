@@ -19,7 +19,7 @@ public class Location implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
 
     @Column(name = "name", length = 100)
     String name;
@@ -30,10 +30,15 @@ public class Location implements IColumn{
     @OneToMany(mappedBy = "location")
     List<Revenue> revenueList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shippedFrom")
-    List<Order> orderList = new ArrayList<>();
+    //@OneToMany(mappedBy = "shippedFrom")
+    //List<Order> orderList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "location")
-    List<Stock> stockList = new ArrayList<>();
+    //@OneToMany(mappedBy = "location")
+    //List<Stock> stockList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return name + address.toString();
+    }
 
 }

@@ -1,4 +1,4 @@
-package ro.msg.learning.services.utils;
+package ro.msg.learning.controllers.utils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

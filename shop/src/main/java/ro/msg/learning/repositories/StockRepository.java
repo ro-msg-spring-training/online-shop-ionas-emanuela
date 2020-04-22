@@ -7,9 +7,13 @@ import ro.msg.learning.entities.Product;
 import ro.msg.learning.entities.Stock;
 import ro.msg.learning.entities.StockKey;
 
+import java.util.List;
+
 @Repository
 public interface StockRepository extends JpaRepository<Stock, StockKey> {
 
-    void deleteAllByProduct(Product product);
+    void deleteByProductId(Integer id);
+    List<Stock> findAllByProductAndQuantityGreaterThanEqual(Product product, Integer quantity);
+    Stock findByProductAndLocation(Product product, Location location);
 
 }

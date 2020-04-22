@@ -29,6 +29,6 @@ public class Stock implements IColumn{
     Location location;
 
     @Column(name = "quantity")
-    int quantity;
+    Integer quantity;
 
 }

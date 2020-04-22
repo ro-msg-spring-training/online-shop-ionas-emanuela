@@ -20,7 +20,7 @@ public class Product implements IColumn{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Integer id;
 
     @Column(name = "name", length = 100)
     String name;
@@ -45,8 +45,8 @@ public class Product implements IColumn{
     @Column(name = "image_url", length = 300)
     String imageUrl;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    List<Stock> stockList = new ArrayList<>();
+    //@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    //List<Stock> stockList = new ArrayList<>();
 
     @Override
     public String toString() {

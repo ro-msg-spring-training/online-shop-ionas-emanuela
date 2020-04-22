@@ -19,13 +19,15 @@ public class OrderDetail implements IColumn{
     OrderDetailKey id;
 
     @ManyToOne
-    @MapsId("id")
-    @JoinColumn(name = "order")
+    //@MapsId("id")
+    //@JoinColumn(name = "order")
+    @JoinColumn(name = "orderid", referencedColumnName = "id", insertable = false, updatable = false)
     Order order;
 
     @ManyToOne
-    @MapsId("id")
-    @JoinColumn(name = "product")
+    //@MapsId("id")
+    //@JoinColumn(name = "product")
+    @JoinColumn(name = "productid", referencedColumnName = "id", insertable = false, updatable = false)
     Product product;
 
     @Column(name = "quantity")

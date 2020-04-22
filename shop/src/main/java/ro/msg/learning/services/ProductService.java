@@ -3,8 +3,7 @@ package ro.msg.learning.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.dtos.ProductDTO;
-import ro.msg.learning.entities.Product;
-import ro.msg.learning.entities.ProductCategory;
+import ro.msg.learning.entities.*;
 import ro.msg.learning.repositories.OrderDetailRepository;
 import ro.msg.learning.repositories.ProductCategoryRepository;
 import ro.msg.learning.repositories.ProductRepository;
@@ -112,27 +111,11 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public void delete(ProductDTO productDTO) {
+    public void delete(int id) {
 
-        Product product = Product.builder().id(productDTO.getId()).build();
-        ProductCategory productCategory = productCategoryRepository.findByName(productDTO.getCategory());
-
-        List<Product> productList = productCategory.getProductList();
-        Iterator<Product> productIterator = productList.iterator();
-
-        while(productIterator.hasNext()) {
-            Product product1 = productIterator.next();
-            if(product1.getId() == product.getId()) {
-                productIterator.remove();
-                break;
-            }
-        }
-
-        productCategoryRepository.save(productCategory);
-
-        //orderDetailRepository.deleteAllByProduct(product);
-        //stockRepository.deleteAllByProduct(product);
-        productRepository.delete(product);
+        orderDetailRepository.deleteByProductId(id);
+        stockRepository.deleteByProductId(id);
+        productRepository.deleteById(id);
 
     }
 
