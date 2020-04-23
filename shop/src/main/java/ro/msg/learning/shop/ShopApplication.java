@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories("ro.msg.learning.repositories")
-@EntityScan(basePackages = {"ro.msg.learning.entities"})
+@EnableJpaRepositories("ro.msg.learning.shop.repositories")
+@EntityScan(basePackages = {"ro.msg.learning.shop.entities"})
 @ComponentScan(basePackages = {"ro.msg.learning"})
 public class ShopApplication {
 

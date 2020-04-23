@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS `stock` (
 
-    `product` int NOT NULL,
-    `location` int NOT NULL,
+    `productid` int NOT NULL,
+    `locationid` int NOT NULL,
     `quantity` int,
-    CONSTRAINT `product_fk` FOREIGN KEY (`product`)
+    CONSTRAINT `product_fk` FOREIGN KEY (`productid`)
         REFERENCES `product`(`id`),
-    CONSTRAINT `location_fk` FOREIGN KEY (`location`)
+    CONSTRAINT `location_fk` FOREIGN KEY (`locationid`)
         REFERENCES `location`(`id`),
-    PRIMARY KEY (`product`, `location`)
+    PRIMARY KEY (`productid`, `locationid`)
 
 );
