@@ -12,6 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
 @Builder
 @Data
@@ -24,6 +25,7 @@ public class ProductDTO {
     Double weight;
     String imageUrl;
     String category;
+    String supplier;
     String categoryDescription;
 
     public ProductDTO(Product product, ProductCategory productCategory) {
@@ -34,6 +36,7 @@ public class ProductDTO {
         this.weight = product.getWeight();
         this.imageUrl = product.getImageUrl();
         this.category = productCategory.getName();
+        this.supplier = product.getSupplier().getName();
         this.categoryDescription = productCategory.getDescription();
     }
 

@@ -25,7 +25,6 @@ public class MostAbundantStrategy implements IStrategy{
     private final StockRepository stockRepository;
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
-    private final LocationRepository locationRepository;
 
     @Override
     public List<RestockDTO> findLocations(OrderInfoDTO order) {

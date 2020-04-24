@@ -2,14 +2,14 @@ package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.dtos.*;
+import ro.msg.learning.shop.dtos.OrderInfoDTO;
+import ro.msg.learning.shop.dtos.RestockDTO;
 import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.repositories.*;
 import ro.msg.learning.shop.services.utils.OrderNotCompletedException;
 import ro.msg.learning.shop.services.utils.StrategyFactory;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +49,6 @@ public class OrderService implements IOrderService{
 
         Customer customer = customerRepository.findById(1).orElse(null);
         Location location = locationRepository.findById(orderInfoDTO.getShopAddress().getId()).orElse(null);
-
-        List<OrderDetail>orderDetailList = new ArrayList<>();
 
         Order order = Order.builder().address(orderInfoDTO.getDeliveryAddress())
                 .createdAt(orderInfoDTO.getTimestamp())

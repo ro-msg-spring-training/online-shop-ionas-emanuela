@@ -6,6 +6,7 @@ import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Location;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data

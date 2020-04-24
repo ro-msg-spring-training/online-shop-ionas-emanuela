@@ -6,12 +6,14 @@ import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.entities.OrderDetail;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.entities.ProductCategory;
+import ro.msg.learning.shop.entities.Supplier;
 import ro.msg.learning.shop.repositories.*;
 import ro.msg.learning.shop.services.utils.EntityNotFoundException;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final OrderDetailRepository orderDetailRepository;
-    private final OrderRepository orderRepository;
     private final StockRepository stockRepository;
+    private final SupplierRepository supplierRepository;
 
     @Override
     public Product findProductById(int id) {
@@ -32,12 +34,16 @@ public class ProductService implements IProductService{
     @Override
     public Product saveProduct(ProductDTO toSave) {
 
-        System.out.println(toSave.getCategory());
-
         ProductCategory  productCategory = productCategoryRepository.findByName(toSave.getCategory());
 
         if(null == productCategory){
             throw new EntityNotFoundException(toSave.getCategory(), "product category");
+        }
+
+        Supplier supplier = supplierRepository.findByName(toSave.getSupplier());
+
+        if(null == supplier) {
+            throw new EntityNotFoundException(toSave.getSupplier(), "supplier");
         }
 
         Product product = Product.builder().name(toSave.getName())
@@ -45,7 +51,8 @@ public class ProductService implements IProductService{
                 .price(toSave.getPrice())
                 .weight(toSave.getWeight())
                 .imageUrl(toSave.getImageUrl())
-                .category(productCategory).build();
+                .category(productCategory)
+                .supplier(supplier).build();
 
         return productRepository.save(product);
     }
@@ -55,7 +62,7 @@ public class ProductService implements IProductService{
 
         Product toUpdate = productRepository.findById(updatedProduct.getId()).orElse(null);
 
-        if(toUpdate == null) {
+        if(null == toUpdate) {
             throw new EntityNotFoundException(updatedProduct.getId(), "product");
         }
 
@@ -77,15 +84,29 @@ public class ProductService implements IProductService{
         if(updatedProduct.getImageUrl().equals("")) {
             updatedProduct.setImageUrl(toUpdate.getImageUrl());
         }
+        if(updatedProduct.getSupplier().equals("")) {
+            updatedProduct.setSupplier(toUpdate.getSupplier().getName());
+        }
 
         ProductCategory productCategory = productCategoryRepository.findByName(updatedProduct.getCategory());
+
+        if(null == productCategory) {
+            throw new EntityNotFoundException(updatedProduct.getCategory(), "product category");
+        }
+
+        Supplier supplier = supplierRepository.findByName(updatedProduct.getSupplier());
+
+        if(null == supplier) {
+            throw new EntityNotFoundException(updatedProduct.getSupplier(), "supplier");
+        }
 
         Product product = Product.builder().id(updatedProduct.getId()).name(updatedProduct.getName())
                 .description(updatedProduct.getDescription())
                 .price(updatedProduct.getPrice())
                 .weight(updatedProduct.getWeight())
                 .imageUrl(updatedProduct.getImageUrl())
-                .category(productCategory).build();
+                .category(productCategory)
+                .supplier(supplier).build();
 
         return productRepository.save(product);
 
@@ -108,16 +129,17 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public List<Product> findAllProductsByOrderId(int id) {
+    public Map<Product, Integer> findAllProductsByOrderId(int id) {
 
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderId(id);
-        List<Product> products = new ArrayList<>();
+
+        Map<Product, Integer> productQuantity = new HashMap<>();
 
         for(OrderDetail orderDetail: orderDetails) {
-            products.add(orderDetail.getProduct());
+            productQuantity.put(orderDetail.getProduct(), orderDetail.getQuantity());
         }
 
-        return products;
+        return productQuantity;
     }
 
 }

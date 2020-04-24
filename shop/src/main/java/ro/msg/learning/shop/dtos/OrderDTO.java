@@ -1,17 +1,15 @@
 package ro.msg.learning.shop.dtos;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Order;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
@@ -22,9 +20,9 @@ public class OrderDTO {
     Address address;
     CustomerDTO customer;
     LocationDTO location;
-    List<ProductDTO> products;
+    Map<ProductDTO,Integer> products;
 
-    public OrderDTO(Order order, List<ProductDTO> products) {
+    public OrderDTO(Order order, Map<ProductDTO, Integer> products) {
         this.id = order.getId();
         this.createdAt = order.getCreatedAt();
         this.address = order.getAddress();

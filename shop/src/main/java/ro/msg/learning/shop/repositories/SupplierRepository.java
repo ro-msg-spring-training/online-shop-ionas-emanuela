@@ -6,4 +6,7 @@ import ro.msg.learning.shop.entities.Supplier;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
+
+    Supplier findByName(String name);
+
 }

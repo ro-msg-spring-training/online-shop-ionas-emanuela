@@ -2,7 +2,6 @@ package ro.msg.learning.shop.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ro.msg.learning.shop.controllers.utils.OrderNotFoundException;
 import ro.msg.learning.shop.dtos.OrderDTO;
 import ro.msg.learning.shop.dtos.OrderInfoDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
@@ -10,9 +9,9 @@ import ro.msg.learning.shop.entities.Order;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.services.OrderService;
 import ro.msg.learning.shop.services.ProductService;
+import ro.msg.learning.shop.services.utils.EntityNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -28,17 +27,10 @@ public class OrderController {
         Order order = orderService.findOrderById(id);
 
         if(null == order) {
-            throw new OrderNotFoundException(id);
+            throw new EntityNotFoundException(id, "order");
         }
 
-        List<Product> products = productService.findAllProductsByOrderId(order.getId());
-        List<ProductDTO> productDTOS = new ArrayList<>();
-
-        for(Product product: products) {
-            productDTOS.add(new ProductDTO(product, product.getCategory()));
-        }
-
-        return new OrderDTO(order, productDTOS);
+        return convertOrder(order);
 
     }
 
@@ -49,14 +41,7 @@ public class OrderController {
         List<OrderDTO> orderDTOS = new ArrayList<>();
 
         for(Order order: orders) {
-            List<Product> products = productService.findAllProductsByOrderId(order.getId());
-            List<ProductDTO> productDTOS = new ArrayList<>();
-
-            for(Product product: products) {
-                productDTOS.add(new ProductDTO(product, product.getCategory()));
-            }
-
-            orderDTOS.add(new OrderDTO(order, productDTOS));
+            orderDTOS.add(convertOrder(order));
         }
 
         return orderDTOS;
@@ -67,15 +52,27 @@ public class OrderController {
 
         Order order = orderService.createOrder(orderInfoDTO);
 
-        List<Product> products = productService.findAllProductsByOrderId(order.getId());
-        List<ProductDTO> productDTOS = new ArrayList<>();
+        return convertOrder(order);
 
-        for(Product product: products) {
-            productDTOS.add(new ProductDTO(product, product.getCategory()));
+    }
+
+    private OrderDTO convertOrder(Order order) {
+
+        Map<Product, Integer> products = productService.findAllProductsByOrderId(order.getId());
+        Map<ProductDTO, Integer> productDTOS = new HashMap<>();
+
+        Iterator it = products.entrySet().iterator();
+
+        while(it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            Product product = (Product) pair.getKey();
+            Integer quantity = (Integer) pair.getValue();
+
+            productDTOS.put(new ProductDTO(product, product.getCategory()), quantity);
+
         }
 
         return new OrderDTO(order, productDTOS);
-
     }
 
 }

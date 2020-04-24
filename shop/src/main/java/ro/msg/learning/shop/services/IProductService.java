@@ -4,6 +4,7 @@ import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.entities.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProductService {
 
@@ -12,6 +13,6 @@ public interface IProductService {
     Product updateProduct(ProductDTO updatedProduct);
     void deleteProductById(int id);
     List<Product> findAllProducts();
-    List<Product> findAllProductsByOrderId(int id);
+    Map<Product, Integer> findAllProductsByOrderId(int id);
 
 }

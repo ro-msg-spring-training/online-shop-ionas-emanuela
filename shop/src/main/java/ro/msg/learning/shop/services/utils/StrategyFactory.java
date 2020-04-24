@@ -28,7 +28,7 @@ public class StrategyFactory {
         switch(chosenStrategy){
 
             case "single_location": return new SingleLocationStrategy(productRepository, productCategoryRepository, stockRepository, locationRepository);
-            case "most_abundant": return new MostAbundantStrategy(stockRepository, productRepository, productCategoryRepository, locationRepository);
+            case "most_abundant": return new MostAbundantStrategy(stockRepository, productRepository, productCategoryRepository);
         }
 
         return null;

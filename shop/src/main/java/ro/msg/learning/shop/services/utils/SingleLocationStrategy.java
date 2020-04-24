@@ -1,7 +1,6 @@
 package ro.msg.learning.shop.services.utils;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dtos.LocationDTO;
 import ro.msg.learning.shop.dtos.OrderInfoDTO;
@@ -15,7 +14,6 @@ import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.ProductCategoryRepository;
 import ro.msg.learning.shop.repositories.ProductRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
-import ro.msg.learning.shop.services.LocationService;
 
 import java.util.*;
 
@@ -36,7 +34,7 @@ public class SingleLocationStrategy implements IStrategy{
         HashMap<Integer, Integer> locationFrequency = new HashMap<>();
 
         Iterator it = order.getProducts().entrySet().iterator();
-        List<Stock> stockList = new ArrayList<>();
+        List<Stock> stockList;
 
         while(it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
@@ -45,7 +43,7 @@ public class SingleLocationStrategy implements IStrategy{
             stockList = stockRepository.findAllByProductAndQuantityGreaterThanEqual(Product.builder().id(productId).build(), quantity);
 
             if(null == stockList || stockList.size() == 0) {
-                throw new OrderNotCompletedException("inexistent stock");
+                throw new OrderNotCompletedException("nonexistent stock");
             }
 
             possibleLocations.put(productId, stockList);
@@ -90,6 +88,7 @@ public class SingleLocationStrategy implements IStrategy{
                     assert product != null;
                     ProductCategory productCategory = productCategoryRepository.findByName(product.getCategory().getName());
 
+                    assert location != null;
                     restockDTO = RestockDTO.builder()
                             .location(new LocationDTO(location))
                             .product(new ProductDTO(product, productCategory))

@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import ro.msg.learning.shop.entities.Customer;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Data
