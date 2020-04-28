@@ -8,10 +8,8 @@ import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.dtos.RestockDTO;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Product;
-import ro.msg.learning.shop.entities.ProductCategory;
 import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.repositories.LocationRepository;
-import ro.msg.learning.shop.repositories.ProductCategoryRepository;
 import ro.msg.learning.shop.repositories.ProductRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 
@@ -22,7 +20,6 @@ import java.util.*;
 public class SingleLocationStrategy implements IStrategy{
 
     private final ProductRepository productRepository;
-    private final ProductCategoryRepository productCategoryRepository;
     private final StockRepository stockRepository;
     private final LocationRepository locationRepository;
 
@@ -40,7 +37,8 @@ public class SingleLocationStrategy implements IStrategy{
             Map.Entry pair = (Map.Entry)it.next();
             int productId = (int) pair.getKey();
             int quantity = (int) pair.getValue();
-            stockList = stockRepository.findAllByProductAndQuantityGreaterThanEqual(Product.builder().id(productId).build(), quantity);
+
+            stockList = stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(productId, quantity);
 
             if(null == stockList || stockList.size() == 0) {
                 throw new OrderNotCompletedException("nonexistent stock");
@@ -85,13 +83,11 @@ public class SingleLocationStrategy implements IStrategy{
                     Map.Entry pair2 = (Map.Entry)it2.next();
 
                     Product product = productRepository.findById((Integer) pair2.getKey()).orElse(null);
-                    assert product != null;
-                    ProductCategory productCategory = productCategoryRepository.findByName(product.getCategory().getName());
 
                     assert location != null;
                     restockDTO = RestockDTO.builder()
                             .location(new LocationDTO(location))
-                            .product(new ProductDTO(product, productCategory))
+                            .product(new ProductDTO(product, product.getCategory()))
                             .quantity((Integer) pair2.getValue())
                             .build();
 

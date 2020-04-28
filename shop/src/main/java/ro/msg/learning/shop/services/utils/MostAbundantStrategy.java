@@ -1,18 +1,13 @@
 package ro.msg.learning.shop.services.utils;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 import ro.msg.learning.shop.dtos.LocationDTO;
 import ro.msg.learning.shop.dtos.OrderInfoDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.dtos.RestockDTO;
 import ro.msg.learning.shop.entities.Product;
-import ro.msg.learning.shop.entities.ProductCategory;
 import ro.msg.learning.shop.entities.Stock;
-import ro.msg.learning.shop.repositories.LocationRepository;
-import ro.msg.learning.shop.repositories.ProductCategoryRepository;
 import ro.msg.learning.shop.repositories.ProductRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 
@@ -24,7 +19,6 @@ public class MostAbundantStrategy implements IStrategy{
 
     private final StockRepository stockRepository;
     private final ProductRepository productRepository;
-    private final ProductCategoryRepository productCategoryRepository;
 
     @Override
     public List<RestockDTO> findLocations(OrderInfoDTO order) {
@@ -40,10 +34,10 @@ public class MostAbundantStrategy implements IStrategy{
             int productId = (int) pair.getKey();
             int quantity = (int) pair.getValue();
 
-            stockList = stockRepository.findAllByProductAndQuantityGreaterThanEqual(Product.builder().id(productId).build(), quantity);
+            stockList = stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(productId, quantity);
 
             if(null == stockList || stockList.size() == 0) {
-                throw new OrderNotCompletedException("not enough products in stock");
+                throw new OrderNotCompletedException("nonexistent stock");
             }
 
             possibleLocations.put(productId, stockList);
@@ -69,10 +63,9 @@ public class MostAbundantStrategy implements IStrategy{
             }
 
             Product product = productRepository.findById(productId).orElse(null);
-            ProductCategory productCategory = productCategoryRepository.findByName(product.getCategory().getName());
 
             RestockDTO restockDTO = RestockDTO.builder()
-                    .product(new ProductDTO(product, productCategory))
+                    .product(new ProductDTO(product, product.getCategory()))
                     .location(new LocationDTO(maxStock.getLocation()))
                     .quantity(order.getProducts().get(productId))
                     .build();
@@ -80,7 +73,6 @@ public class MostAbundantStrategy implements IStrategy{
             restockDTOList.add(restockDTO);
 
         }
-
 
         return restockDTOList;
     }

@@ -27,7 +27,6 @@ INSERT INTO `stock` VALUES(3, 1, 200);
 INSERT INTO `stock` VALUES(4, 1, 150);
 INSERT INTO `stock` VALUES(5, 2, 150);
 INSERT INTO `stock` VALUES(6, 2, 150);
-INSERT INTO `stock` VALUES(1, 2, 150);
 
 INSERT INTO `orders`
 VALUES(1, 1, 1, '2020-04-21', 'Romania', 'Targu Lapus', 'Maramures', 'L. Rebreanu, 41');
