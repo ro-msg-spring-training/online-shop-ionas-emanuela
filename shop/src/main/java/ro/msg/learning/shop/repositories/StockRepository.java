@@ -17,5 +17,6 @@ public interface StockRepository extends JpaRepository<Stock, StockKey> {
     List<Stock> findAllByProductIdAndQuantityGreaterThanEqual(Integer id, Integer quantity);
     Stock findByProductAndLocation(Product product, Location location);
     List<Stock> findByProductId(Integer id);
+    void deleteAll();
 
 }

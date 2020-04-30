@@ -6,17 +6,15 @@ import ro.msg.learning.shop.dtos.OrderInfoDTO;
 import ro.msg.learning.shop.dtos.RestockDTO;
 import ro.msg.learning.shop.entities.*;
 import ro.msg.learning.shop.repositories.*;
+import ro.msg.learning.shop.services.utils.IStrategy;
 import ro.msg.learning.shop.services.utils.OrderNotCompletedException;
-import ro.msg.learning.shop.services.utils.StrategyFactory;
 
 import javax.transaction.Transactional;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService implements IOrderService{
+public class OrderService{
 
     private final StockRepository stockRepository;
     private final OrderRepository orderRepository;
@@ -24,13 +22,13 @@ public class OrderService implements IOrderService{
     private final LocationRepository locationRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ProductRepository productRepository;
-    private final StrategyFactory strategy;
+
+    private final IStrategy getStrategy;
 
     @Transactional
-    @Override
     public Order createOrder(OrderInfoDTO orderInfoDTO) {
 
-        List<RestockDTO> restockDTOList = strategy.getStrategy().findLocations(orderInfoDTO);
+        List<RestockDTO> restockDTOList = getStrategy.findLocations(orderInfoDTO);
 
         for(RestockDTO restockDTO: restockDTOList) {
 
@@ -57,13 +55,7 @@ public class OrderService implements IOrderService{
 
         Order savedOrder = orderRepository.save(order);
 
-        Iterator it = orderInfoDTO.getProducts().entrySet().iterator();
-
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            int productId = (int) pair.getKey();
-            int quantity = (int) pair.getValue();
-
+        orderInfoDTO.getProducts().forEach((productId, quantity) -> {
             Product product = productRepository.findById(productId).orElse(null);
 
             if(null == product) {
@@ -74,8 +66,7 @@ public class OrderService implements IOrderService{
             OrderDetail orderDetail = OrderDetail.builder().id(orderDetailKey).order(savedOrder).product(product).quantity(quantity).build();
 
             orderDetailRepository.save(orderDetail);
-
-        }
+        });
 
         return orderRepository.findById(savedOrder.getId()).orElse(null);
     }

@@ -56,8 +56,8 @@ class MostAbundantStrategyTest {
         stockList2.add(stock3);
         stockList2.add(stock4);
 
-        Mockito.when(stockRepository.findAllByProductAndQuantityGreaterThanEqual(product1, 10)).thenReturn(stockList1);
-        Mockito.when(stockRepository.findAllByProductAndQuantityGreaterThanEqual(product2, 20)).thenReturn(stockList2);
+        Mockito.when(stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(1, 10)).thenReturn(stockList1);
+        Mockito.when(stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(2, 20)).thenReturn(stockList2);
 
         HashMap<Integer, Integer> products = new HashMap<>();
         products.put(1,10);
@@ -80,23 +80,23 @@ class MostAbundantStrategyTest {
         OrderInfoDTO orderInfoDTO = OrderInfoDTO.builder().deliveryAddress(new Address())
                 .shopAddress(new LocationDTO()).products(products).build();
 
-        Assertions.assertThrows(EntityNotFoundException.class, () ->{
+        Mockito.when(stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(1, 10)).thenReturn(null);
+
+        Assertions.assertThrows(OrderNotCompletedException.class, () ->{
             mostAbundantStrategy.findLocations(orderInfoDTO);
         });
 
-        Mockito.verify(productRepository, Mockito.times(1)).findById(1);
-        Mockito.verifyNoMoreInteractions(productRepository);
-        Mockito.verifyNoMoreInteractions(stockRepository);
+        Mockito.verify(stockRepository, Mockito.times(1)).findAllByProductIdAndQuantityGreaterThanEqual(1, 10);
+
     }
 
     @Test
     void testMostAbundantStrategyStockError() {
-        Product product1 = Product.builder().id(1).supplier(new Supplier()).category(new ProductCategory()).build();
-        Mockito.when(productRepository.findById(1)).thenReturn(java.util.Optional.ofNullable(product1));
-        Mockito.when(stockRepository.findAllByProductAndQuantityGreaterThanEqual(product1, 10)).thenReturn(null);
 
         HashMap<Integer, Integer> products = new HashMap<>();
         products.put(1,10);
+
+        Mockito.when(stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(1, 10)).thenReturn(null);
 
         OrderInfoDTO orderInfoDTO = OrderInfoDTO.builder().deliveryAddress(new Address())
                 .shopAddress(new LocationDTO()).products(products).build();
@@ -105,11 +105,7 @@ class MostAbundantStrategyTest {
             mostAbundantStrategy.findLocations(orderInfoDTO);
         });
 
-        Mockito.verify(productRepository, Mockito.times(1)).findById(1);
-        Mockito.verify(stockRepository, Mockito.times(1)).findAllByProductAndQuantityGreaterThanEqual(product1, 10);
-
-        Mockito.verifyNoMoreInteractions(productRepository);
-        Mockito.verifyNoMoreInteractions(stockRepository);
+        Mockito.verify(stockRepository, Mockito.times(1)).findAllByProductIdAndQuantityGreaterThanEqual(1, 10);
     }
 
 }

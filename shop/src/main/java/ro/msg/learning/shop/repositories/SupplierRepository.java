@@ -8,5 +8,6 @@ import ro.msg.learning.shop.entities.Supplier;
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
 
     Supplier findByName(String name);
+    void deleteById(int id);
 
 }

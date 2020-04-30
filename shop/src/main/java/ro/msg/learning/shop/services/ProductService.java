@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements IProductService{
+public class ProductService{
 
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
@@ -25,13 +25,11 @@ public class ProductService implements IProductService{
     private final StockRepository stockRepository;
     private final SupplierRepository supplierRepository;
 
-    @Override
     public Product findProductById(int id) {
 
         return productRepository.findById(id).orElse(null);
     }
 
-    @Override
     public Product saveProduct(ProductDTO toSave) {
 
         ProductCategory  productCategory = productCategoryRepository.findByName(toSave.getCategory());
@@ -57,7 +55,6 @@ public class ProductService implements IProductService{
         return productRepository.save(product);
     }
 
-    @Override
     public Product updateProduct(ProductDTO updatedProduct) {
 
         Product toUpdate = productRepository.findById(updatedProduct.getId()).orElse(null);
@@ -112,7 +109,6 @@ public class ProductService implements IProductService{
 
     }
 
-    @Override
     public void deleteProductById(int id) {
 
         orderDetailRepository.deleteByProductId(id);
@@ -121,14 +117,12 @@ public class ProductService implements IProductService{
 
     }
 
-    @Override
     public List<Product> findAllProducts() {
 
         return productRepository.findAll();
 
     }
 
-    @Override
     public Map<Product, Integer> findAllProductsByOrderId(int id) {
 
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderId(id);

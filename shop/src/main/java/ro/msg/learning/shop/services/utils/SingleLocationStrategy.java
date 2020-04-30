@@ -30,75 +30,47 @@ public class SingleLocationStrategy implements IStrategy{
         HashMap<Integer, List<Stock>> possibleLocations = new HashMap<>();
         HashMap<Integer, Integer> locationFrequency = new HashMap<>();
 
-        Iterator it = order.getProducts().entrySet().iterator();
-        List<Stock> stockList;
-
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            int productId = (int) pair.getKey();
-            int quantity = (int) pair.getValue();
-
-            stockList = stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(productId, quantity);
+        order.getProducts().forEach((productId, quantity) -> {
+            List<Stock> stockList = stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(productId, quantity);
 
             if(null == stockList || stockList.size() == 0) {
                 throw new OrderNotCompletedException("nonexistent stock");
             }
 
             possibleLocations.put(productId, stockList);
-        }
+        });
 
-        it = possibleLocations.entrySet().iterator();
-
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            stockList = possibleLocations.get(pair.getKey());
-
-            for(Stock stock: stockList) {
-
+        possibleLocations.forEach((productId, stockList) -> {
+            stockList.forEach(stock -> {
                 int locationId = stock.getLocation().getId();
-                if(locationFrequency.containsKey(locationId)) {
+                if(locationFrequency.containsKey(locationId)){
                     locationFrequency.put(locationId, locationFrequency.get(locationId) + 1);
                 }
                 else {
                     locationFrequency.put(locationId, 1);
                 }
+            });
+        });
 
-            }
-        }
-
-        it = locationFrequency.entrySet().iterator();
-
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            int locationId = (int) pair.getKey();
-            int locationCount = (int) pair.getValue();
-
+        locationFrequency.forEach((locationId, locationCount) -> {
             if(locationCount >= order.getProducts().size()) {
-                RestockDTO restockDTO;
                 Location location = locationRepository.findById(locationId).orElse(null);
 
-                Iterator it2 = order.getProducts().entrySet().iterator();
-                while(it2.hasNext()) {
-
-                    Map.Entry pair2 = (Map.Entry)it2.next();
-
-                    Product product = productRepository.findById((Integer) pair2.getKey()).orElse(null);
-
-                    assert location != null;
-                    restockDTO = RestockDTO.builder()
+                order.getProducts().forEach((productId, quantity) -> {
+                    Product product = productRepository.findById(productId).orElse(null);
+                    RestockDTO restockDTO = RestockDTO.builder()
                             .location(new LocationDTO(location))
                             .product(new ProductDTO(product, product.getCategory()))
-                            .quantity((Integer) pair2.getValue())
+                            .quantity(quantity)
                             .build();
 
                     restockDTOList.add(restockDTO);
-                }
+                });
 
-                return restockDTOList;
             }
+        });
 
-        }
+        return restockDTOList;
 
-        throw new OrderNotCompletedException("unexpected error");
     }
 }

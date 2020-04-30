@@ -61,16 +61,9 @@ public class OrderController {
         Map<Product, Integer> products = productService.findAllProductsByOrderId(order.getId());
         Map<ProductDTO, Integer> productDTOS = new HashMap<>();
 
-        Iterator it = products.entrySet().iterator();
-
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            Product product = (Product) pair.getKey();
-            Integer quantity = (Integer) pair.getValue();
-
+        products.forEach((product, quantity) -> {
             productDTOS.put(new ProductDTO(product, product.getCategory()), quantity);
-
-        }
+        });
 
         return new OrderDTO(order, productDTOS);
     }

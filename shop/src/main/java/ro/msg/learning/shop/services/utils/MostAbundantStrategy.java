@@ -26,41 +26,18 @@ public class MostAbundantStrategy implements IStrategy{
         List<RestockDTO> restockDTOList = new ArrayList<>();
         Map<Integer, List<Stock>> possibleLocations = new HashMap<Integer, List<Stock>>();
 
-        Iterator it = order.getProducts().entrySet().iterator();
-        List<Stock> stockList;
+        order.getProducts().forEach((productId, quantity) -> {
+            List<Stock> stockList = stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(productId, quantity);
 
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            int productId = (int) pair.getKey();
-            int quantity = (int) pair.getValue();
-
-            stockList = stockRepository.findAllByProductIdAndQuantityGreaterThanEqual(productId, quantity);
-
-            if(null == stockList || stockList.size() == 0) {
+            if(stockList == null || stockList.size() == 0) {
                 throw new OrderNotCompletedException("nonexistent stock");
             }
 
             possibleLocations.put(productId, stockList);
+        });
 
-        }
-
-        it = possibleLocations.entrySet().iterator();
-
-        while(it.hasNext()) {
-
-            Map.Entry pair = (Map.Entry) it.next();
-            int productId = (int) pair.getKey();
-            stockList = possibleLocations.get(productId);
-
-            int max = 0;
-            Stock maxStock = new Stock();
-
-            for(Stock stock: stockList) {
-                if(stock.getQuantity() > max) {
-                    max = stock.getQuantity();
-                    maxStock = stock;
-                }
-            }
+        possibleLocations.forEach((productId, stockList) -> {
+            Stock maxStock = Collections.max(stockList, Comparator.comparing(Stock::getQuantity));
 
             Product product = productRepository.findById(productId).orElse(null);
 
@@ -71,8 +48,7 @@ public class MostAbundantStrategy implements IStrategy{
                     .build();
 
             restockDTOList.add(restockDTO);
-
-        }
+        });
 
         return restockDTOList;
     }

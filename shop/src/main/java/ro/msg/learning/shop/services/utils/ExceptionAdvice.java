@@ -7,7 +7,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class EntityNotFoundAdvice {
+public class ExceptionAdvice {
+
+    @ResponseBody
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    String orderNotCompletedHandler(OrderNotCompletedException ex) {
+        return ex.getMessage();
+    }
 
     @ResponseBody
     @ExceptionHandler

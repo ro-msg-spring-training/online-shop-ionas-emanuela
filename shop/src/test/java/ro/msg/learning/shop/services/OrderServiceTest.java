@@ -10,8 +10,8 @@ import ro.msg.learning.shop.dtos.OrderInfoDTO;
 import ro.msg.learning.shop.entities.Address;
 import ro.msg.learning.shop.entities.Order;
 import ro.msg.learning.shop.repositories.*;
+import ro.msg.learning.shop.services.utils.MostAbundantStrategy;
 import ro.msg.learning.shop.services.utils.OrderNotCompletedException;
-import ro.msg.learning.shop.services.utils.StrategyFactory;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ class OrderServiceTest {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private StrategyFactory strategy;
+    private MostAbundantStrategy mostAbundantStrategy;
 
     @Test
     void orderServiceTestCreateSuccessful() {
@@ -45,12 +45,12 @@ class OrderServiceTest {
         HashMap<Integer, Integer> products = new HashMap<>();
         products.put(1, 10);
         products.put(2, 15);
-        products.put(3,20);
+        products.put(3, 20);
 
         OrderInfoDTO orderInfoDTO = OrderInfoDTO.builder().timestamp(new Date()).deliveryAddress(address).shopAddress(locationDTO).products(products).build();
 
         OrderService orderService = new OrderService(stockRepository, orderRepository, customerRepository,
-                locationRepository, orderDetailRepository, productRepository, strategy);
+                locationRepository, orderDetailRepository, productRepository, mostAbundantStrategy);
 
         int stock1Prev = stockRepository.findByProductId(1).get(0).getQuantity();
         int stock2Prev = stockRepository.findByProductId(2).get(0).getQuantity();
@@ -88,11 +88,9 @@ class OrderServiceTest {
         OrderInfoDTO orderInfoDTO = OrderInfoDTO.builder().timestamp(new Date()).deliveryAddress(address).shopAddress(locationDTO).products(products).build();
 
         OrderService orderService = new OrderService(stockRepository, orderRepository, customerRepository,
-                locationRepository, orderDetailRepository, productRepository, strategy);
+                locationRepository, orderDetailRepository, productRepository, mostAbundantStrategy);
 
-        Assertions.assertThrows(OrderNotCompletedException.class, () -> {
-            orderService.createOrder(orderInfoDTO);
-        });
+        Assertions.assertThrows(OrderNotCompletedException.class, () -> orderService.createOrder(orderInfoDTO));
 
     }
 

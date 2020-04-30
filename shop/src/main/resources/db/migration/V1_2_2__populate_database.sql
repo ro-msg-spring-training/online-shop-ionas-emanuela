@@ -21,8 +21,8 @@ INSERT INTO `location` VALUES(1, 'Warehouse', 'Romania', 'Targu Lapus', 'Maramur
 INSERT INTO `location` VALUES(2, 'Other_Warehouse', 'Romania', 'Targu Lapus', 'Maramures', 'L. Rebreanu, 43');
 
 INSERT INTO `stock` VALUES(1, 1, 100);
-INSERT INTO `stock` VALUES(2, 1, 150);
-INSERT INTO `stock` VALUES(2, 2, 300);
+INSERT INTO `stock` VALUES(2, 1, 350);
+INSERT INTO `stock` VALUES(4, 2, 300);
 INSERT INTO `stock` VALUES(3, 1, 200);
 INSERT INTO `stock` VALUES(4, 1, 150);
 INSERT INTO `stock` VALUES(5, 2, 150);
