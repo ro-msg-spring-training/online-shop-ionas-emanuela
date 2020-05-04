@@ -15,7 +15,7 @@ INSERT INTO `product` VALUES(5, 'Sausage', 'Soy beans', '3.5', '1', 1, 4, 'image
 INSERT INTO `product` VALUES(6, 'White loaf', 'Flour, yeast, salt', '1', '0.8', 3, 3, 'image_url');
 INSERT INTO `product` VALUES(7, 'Cheesecake', 'vegan cheese, blueberries', '10', '1', 3, 3, 'image_url');
 
-INSERT INTO `customer` VALUES(1, 'John', 'Johnson', 'heres_johnny', 'pass', 'john_johnson@yahoo.com');
+INSERT INTO `customer` VALUES(1, 'John', 'Johnson', 'heres_johnny', '123', 'rou');
 
 INSERT INTO `location` VALUES(1, 'Warehouse', 'Romania', 'Targu Lapus', 'Maramures', 'L. Rebreanu, 42');
 INSERT INTO `location` VALUES(2, 'Other_Warehouse', 'Romania', 'Targu Lapus', 'Maramures', 'L. Rebreanu, 43');
